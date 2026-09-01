@@ -1,0 +1,173 @@
+# SwayFX 0.9.6 
+
+# display out: swaymsg -t get_workspaces
+output VGA-1 disable
+
+set $mod Mod4
+
+# gaps
+default_floating_border none
+
+smart_gaps off
+smart_gaps inverse_outer
+
+smart_borders off
+gaps inner 40
+gaps outer 0
+default_border pixel 2
+
+# decorations Ayu Light
+
+set $bg_main  #f8f9fa
+set $bg_panel #f3f4f5
+set $text     #5c6773
+set $accent   #ff9940
+set $subtext  #abb2bf
+set $accent_2 #36a3d9
+set $urgent   #ff6565
+
+client.focused           $accent    $bg_main $text    $accent_2 $bg_main
+client.focused_inactive  $bg_panel  $bg_main $text    $bg_panel $bg_main
+client.unfocused         $bg_panel  $bg_main $subtext $bg_panel $bg_main
+
+# effects SwayFX
+blur on
+blur_xray off
+blur_passes 2
+blur_radius 2
+
+shadows on
+shadows_on_csd off
+shadow_blur_radius 12      
+shadow_color #6969691A
+
+corner_radius 12
+
+layer_effects "launcher" shadows enable; corner_radius 12
+
+exec_always swaybg -o "*" -i $HOME/Pictures/olive.jpg -m fill
+
+exec_always waybar
+
+bindsym Print exec grim ~/Screen/$(date +'%Y-%m-%d_%H-%M-%S').png
+
+# D-Bus и systemd
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE MOZ_ENABLE_WAYLAND QT_QPA_PLATFORM
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE MOZ_ENABLE_WAYLAND QT_QPA_PLATFORM
+
+### keyboard name: swaymsg -t get_inputs
+input type:keyboard {
+    xkb_layout us,ru
+    xkb_options grp:caps_toggle
+    xkb_numlock disable
+}
+
+# themes, cursors
+seat * xcursor_theme Bibata-Modern-Ice 16
+
+set $gnome_schema org.gnome.desktop.interface
+
+exec_always {
+    gsettings set $gnome_schema gtk-theme 'Zorin-Light'
+    gsettings set $gnome_schema icon-theme 'Gruvbox'
+    gsettings set $gnome_schema cursor-theme 'Bibata-Modern-Ice'
+    gsettings set $gnome_schema cursor-size 16
+}
+
+# popup rules
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="toolbox"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_role="bubble"] floating enable
+
+### Key bindings
+bindsym $mod+Alt+r reload
+bindsym $mod+Shift+w exec killall waybar && waybar &
+
+# Apps
+bindsym $mod+Return exec alacritty
+bindsym $mod+q kill
+bindsym $mod+d exec fuzzel 
+bindsym $mod+t exec thunar
+    
+# volume
+bindsym XF86AudioRaiseVolume exec volumectl -u up
+bindsym XF86AudioLowerVolume exec volumectl -u down
+bindsym XF86AudioMute exec volumectl toggle-mute
+bindsym XF86AudioMicMute exec volumectl -m toggle-mute
+
+# change focus ws
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move ws
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# ws
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+
+# Layout
+bindsym $mod+b splith
+bindsym $mod+v splitv
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+f fullscreen
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+bindsym $mod+a focus parent
+
+floating_modifier $mod normal
+
+# --- CLEAN/CINEMA MODE ---
+set $default_inner 40
+set $default_outer 0
+
+# clean mode
+set $enable_clean_mode mode "clean"; gaps inner all set 0; gaps outer all set 0; blur disable; shadows disable; exec killall -SIGUSR1 waybar
+
+# start clean mode
+bindsym $mod+g $enable_clean_mode
+
+# restore effects
+mode "clean" {   
+    bindsym $mod+g mode "default"; gaps inner all set $default_inner; gaps outer all set $default_outer; blur enable; shadows enable; exec killall -SIGUSR1 waybar
+}
+
+
+
+
