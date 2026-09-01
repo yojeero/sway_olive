@@ -22,16 +22,18 @@ Sway Dotfiles
 > Waybar is visible > gaps in 40 > normal mode  
 > Waybar is hide > `super + g ` > gaps in 0 > working mode
 
-| **Window Manager** <img width="60"/> | `swayfx` <img width="140"/> |
-| :----------------------------------- | :-------------------------- |
-| **Status bar**                       | `waybar`                    |
-| **Terminal**                         | `foot`                      |
-| **Launcher**                         | `fuzzel`                    |
-| **Wallpaper**                        | `swaybg`                    |
-| **Compositor**                       | `wayland`                   |
-| **Screenshot**                       | `grim`                      |
-| **Viewer**                           | `imv`                       |
-| **Logout menu**                      | `wlogout`                   |
+<img src="screen/5.png" alt="Preview" width="100%" max-width="800px">
+
+| **Window Manager** <img width="60"/> | `sway` <img width="140"/> |
+| :----------------------------------- | :------------------------ |
+| **Status bar**                       | `waybar`                  |
+| **Terminal**                         | `foot`                    |
+| **Launcher**                         | `fuzzel`                  |
+| **Wallpaper**                        | `swaybg`                  |
+| **Compositor**                       | `wayland`                 |
+| **Screenshot**                       | `grim`                    |
+| **Viewer**                           | `imv`                     |
+| **Logout menu**                      | `wlogout`                 |
 
 #### Fonts / Theme
 
@@ -56,40 +58,46 @@ on the step - profile - select > desktop > sway
 
 ```
 sudo pacman -Syu
+
+sudo pacman -S \
+      xorg-xwayland \
+      seatd \
+      polkit
 ```
+
+> sudo systemctl enable --now seatd
+> sudo usermod -aG seat $USER
 
 #### 3. Installing Sway
 
 ```
-sudo pacman -S \
-swayfx \
-    swaylock \
-    swayidle \
-    swaybg \
-    waybar \
-    fuzzel \
-    foot \
-    wlogout \
-    mako \
-    wl-clipboard \
-    satty \
-    grim \
-    slurp \
-    xdg-desktop-portal-wlr \
-    xdg-desktop-portal-gtk
-```
+sudo pacman -S --needed base-devel git
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si
 
-```
-sudo pacman -S seatd
-sudo systemctl enable --now seatd
-
-sudo usermod -aG video USERNAME
+paru -S \
+sway-git \
+   wlroots-git \
+   waybar-git \
+   swaylock \
+   swayidle \
+   swaybg \
+   wl-clipboard \
+   wlogout \
+   fuzzel \
+   foot \
+   mako \
+   grim \
+   slurp \
+   xdg-desktop-portal-wlr \
+   xdg-desktop-portal-gtk
 ```
 
 #### 4. Installing Pkgs
 
 ```
-sudo pacman -S \
+paru -S \
 
 alacritty \
    kitty \
@@ -140,7 +148,7 @@ lxappearance \
 #### 5. Installing FISH
 
 ```
-sudo pacman -S \
+paru -S \
 fish \
    eza \
    fzf \
@@ -175,7 +183,23 @@ chsh -s $(command -v fish)
 
 ### Login TTY
 
-> ### sway wm
+> ### Sway > use Bash or ZSH or FISH
+
+#### .bash_profile
+
+```
+if [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+  exec sway
+fi
+```
+
+#### .zprofile
+
+```
+if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
+  exec sway
+fi
+```
 
 #### config.fish
 
@@ -196,6 +220,6 @@ if status is-login
 end
 ```
 
-#### Login to sway wm
+#### Login to Sway
 
 > Arch Linux > login > pass

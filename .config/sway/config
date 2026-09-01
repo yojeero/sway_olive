@@ -1,4 +1,4 @@
-# SwayFX 0.9.6 
+# Sway git 1.13
 
 # display out: swaymsg -t get_workspaces
 output VGA-1 disable
@@ -29,21 +29,6 @@ set $urgent   #ff6565
 client.focused           $accent    $bg_main $text    $accent_2 $bg_main
 client.focused_inactive  $bg_panel  $bg_main $text    $bg_panel $bg_main
 client.unfocused         $bg_panel  $bg_main $subtext $bg_panel $bg_main
-
-# effects SwayFX
-blur on
-blur_xray off
-blur_passes 2
-blur_radius 2
-
-shadows on
-shadows_on_csd off
-shadow_blur_radius 12      
-shadow_color #6969691A
-
-corner_radius 12
-
-layer_effects "launcher" shadows enable; corner_radius 12
 
 exec_always swaybg -o "*" -i $HOME/Pictures/olive.jpg -m fill
 
@@ -158,14 +143,14 @@ set $default_inner 40
 set $default_outer 0
 
 # clean mode
-set $enable_clean_mode mode "clean"; gaps inner all set 0; gaps outer all set 0; blur disable; shadows disable; exec killall -SIGUSR1 waybar
+set $enable_clean_mode mode "clean"; gaps inner all set 0; gaps outer all set 0; exec killall -SIGUSR1 waybar
 
 # start clean mode
 bindsym $mod+g $enable_clean_mode
 
 # restore effects
 mode "clean" {   
-    bindsym $mod+g mode "default"; gaps inner all set $default_inner; gaps outer all set $default_outer; blur enable; shadows enable; exec killall -SIGUSR1 waybar
+    bindsym $mod+g mode "default"; gaps inner all set $default_inner; gaps outer all set $default_outer; exec killall -SIGUSR1 waybar
 }
 
 
