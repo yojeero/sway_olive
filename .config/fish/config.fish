@@ -8,6 +8,7 @@ set -g theme_hide_hostname no
 set -g theme_hostname always
 
 set -gx MICRO_TRUECOLOR 1
+set -gx TERMINAL foot
 
 # nano
 abbr -a n nano
@@ -36,23 +37,48 @@ if test -f /etc/profile.env
 end
 
 # ----------------------------------
-# sway TTY1
+# Interactive session TTY1
 # ----------------------------------
+if status is-interactive; and test (tty) = "/dev/tty1"
+    echo "==================================="
+    echo " Run Mango or Sway:   "
+    echo " [1] Mango (Wayland)              "
+    echo " [2] Sway (Wayland)              "
+    echo " [3] Stay in TTY      "
+    echo "==================================="
+    
+    # Read the user's choice
+    read -P "Select [1-3]: " choice
 
-if status is-login
-    if test (tty) = /dev/tty1
+    switch $choice
+        case 1
+            echo "Start Mango (Wayland)..."    
+            set -gx XDG_CURRENT_DESKTOP mango
+            set -gx XDG_SESSION_DESKTOP mango
+            set -gx XDG_SESSION_TYPE wayland
+            set -gx MOZ_ENABLE_WAYLAND 1
+            set -gx QT_QPA_PLATFORM wayland
+            
+            exec mango
 
-        set -gx XDG_CURRENT_DESKTOP sway
-        set -gx XDG_SESSION_DESKTOP sway
-        set -gx XDG_SESSION_TYPE wayland
-        set -gx MOZ_ENABLE_WAYLAND 1
-        set -gx QT_QPA_PLATFORM wayland
-        
-        set -gx _JAVA_AWT_WM_NONREPARENTING 1 
+        case 2
+            echo "Start Sway (Wayland)..."
+            set -gx XDG_CURRENT_DESKTOP sway
+            set -gx XDG_SESSION_DESKTOP sway
+            set -gx XDG_SESSION_TYPE wayland
+            set -gx MOZ_ENABLE_WAYLAND 1
+            set -gx QT_QPA_PLATFORM wayland
+            
+            exec sway
 
-        exec sway
+        case 3
+            echo "Enter to TTY!"
+            
+        case '*'
+            echo "Bad step. Stay in TTY."
     end
 end
+
 
 
 

@@ -30,7 +30,7 @@ client.focused           $accent    $bg_main $text    $accent_2 $bg_main
 client.focused_inactive  $bg_panel  $bg_main $text    $bg_panel $bg_main
 client.unfocused         $bg_panel  $bg_main $subtext $bg_panel $bg_main
 
-exec_always swaybg -o "*" -i $HOME/Pictures/olive.jpg -m fill
+exec_always swaybg -o "*" -i $HOME/Pictures/arch.jpg -m fill
 
 exec_always waybar
 
